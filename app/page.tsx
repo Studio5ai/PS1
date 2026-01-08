@@ -4,10 +4,10 @@ import { useEffect, useRef } from 'react';
 import './styles.css';
 
 export default function Home() {
-  const heroContainerRef = useRef(null);
-  const backgroundRef = useRef(null);
-  const scrollIndicatorRef = useRef(null);
-  const stripesRef = useRef([]);
+  const heroContainerRef = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+  const scrollIndicatorRef = useRef<HTMLDivElement>(null);
+  const stripesRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const stripeConfig = [
     // Black stripes
@@ -36,7 +36,11 @@ export default function Home() {
     const scrollIndicator = scrollIndicatorRef.current;
     const stripes = stripesRef.current;
 
+    if (!heroContainer || !background || !scrollIndicator) return;
+
     function updateParallax() {
+      if (!heroContainer || !background || !scrollIndicator) return;
+
       const scrollTop = window.pageYOffset;
       const heroHeight = heroContainer.offsetHeight;
       const viewportHeight = window.innerHeight;
@@ -92,7 +96,7 @@ export default function Home() {
               <div
                 key={stripe.className}
                 className={`stripe ${stripe.className}`}
-                ref={(el) => (stripesRef.current[index] = el)}
+                ref={(el) => { stripesRef.current[index] = el; }}
               >
                 <svg viewBox="0 0 864 691.2" preserveAspectRatio="xMidYMid slice">
                   {stripe.type === 'rect' ? (
